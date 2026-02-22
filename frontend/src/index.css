@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+.animate-slider{
+  background: linear-gradient(to bottom,rgb(97, 97, 232),rgb(211, 206, 244));
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+
+::-webkit-scrollbar-track{
+  width: 2px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb{
+  background: rgb(133, 133, 251);
+}
+::-webkit-scrollbar{
+  width: 5px;
+}
