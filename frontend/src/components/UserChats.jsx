@@ -61,7 +61,7 @@ const UserChats = () => {
       </div>
 
       {/* Chats */}
-      <div className="h-full pb-30 overflow-y-scroll px-15 flex flex-col w-full gap-2 pt-3">
+      <div className="h-full pb-30 overflow-y-scroll px-15 flex flex-col w-full gap-2 pt-20">
         {currentUserMessages.map((message) => (
           <div
             className={`${message.senderId == selectedUserId ? "" : "justify-end"} flex relative`}

@@ -1,14 +1,14 @@
 import { create } from "zustand";
 import axios from "axios";
 import toast from "react-hot-toast";
-import {io} from "socket.io-client"
+import { io } from "socket.io-client";
 const baseUrl = "http://localhost:3000/api";
 const BASE_URL = "http://localhost:3000";
-export const useAuthStore = create((set,get) => ({
+export const useAuthStore = create((set, get) => ({
   authUser: null,
   allUsers: null,
   selectedUser: null,
-  socket:null,
+  socket: null,
   onlineUsers: [],
 
   signupFunction: async (username, password, email) => {
@@ -109,15 +109,34 @@ export const useAuthStore = create((set,get) => ({
     socket.connect();
 
     set({ socket });
-    
+
     // listen for online users event
     socket.on("getOnlineUsers", (userIds) => {
       set({ onlineUsers: userIds });
     });
-    console.log("get().onlineUsers")
+    console.log("get().onlineUsers");
   },
 
   disconnectSocket: () => {
     if (get().socket?.connected) get().socket.disconnect();
+  },
+
+  updateProfile: async (bio, fullname) => {
+    try {
+      const res = await axios.post(
+        `${baseUrl}/auth/update-profile`,
+        {
+          bio,
+          fullname,
+        },
+        { withCredentials: true },
+      );
+      console.log("Updated:", res);
+      set({ authUser: res.data.user });
+      toast.success(res.data.message);
+    } catch (error) {
+      // console.log("Error in updateProfile", error);
+      toast.error(error.response.data.message);
+    }
   },
 }));

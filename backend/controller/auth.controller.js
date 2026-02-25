@@ -143,6 +143,36 @@ export const signout = async (req, res) => {
   }
 };
 
+export const updateProfile = async (req, res) => {
+  try {
+    const { fullname, bio } = req.body;
+    const userId = req.userId;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (fullname) user.fullname = fullname;
+    if (bio) user.bio = bio;
+    await user.save();
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error) {
+    console.log("Error in updating profile");
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -240,15 +270,15 @@ export const getAuthUser = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
   try {
-    const userId = req.userId
+    const userId = req.userId;
     let users = await User.find();
-    users = users.filter((user)=>user._id!=userId)
-    return res.status(200).json({users})
+    users = users.filter((user) => user._id != userId);
+    return res.status(200).json({ users });
   } catch (error) {
     console.log("Error in getAllUsers,", error);
     return res.status(500).json({
       success: false,
-      message:"Internal server error"
-    })
+      message: "Internal server error",
+    });
   }
-}
+};
