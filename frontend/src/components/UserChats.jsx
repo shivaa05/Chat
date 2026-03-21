@@ -10,7 +10,7 @@ const UserChats = () => {
     selectedUserId,
     subscribeToMessages,
     getChatsByUserId,
-    unsendeMessage
+    unsendeMessage,
   } = useChatStore();
 
   const UTCtoIST = (UTCtime) => {
@@ -48,7 +48,11 @@ const UserChats = () => {
       {/* Header */}
       <div className="sticky flex items-center gap-3 top-0 left-0 border-b py-2 px-4 bg-slate-950/50 z-100 backdrop-blur-lg">
         <div className="size-12 rounded-full border bg-zinc-700 text-2xl flex justify-center items-center">
-          {selectedUser?.username[0].toUpperCase()}
+          {selectedUser.profileImage ? (
+            <img src={selectedUser.profileImage} className="size-12 rounded-full object-cover"/>
+          ) : (
+            selectedUser?.username[0].toUpperCase()
+          )}
         </div>
         <div className="flex flex-col text-lg">
           <div>{selectedUser?.username}</div>
@@ -66,7 +70,7 @@ const UserChats = () => {
           <div
             className={`${message.senderId == selectedUserId ? "" : "justify-end"} flex relative`}
             key={message._id}
-            >
+          >
             <div className="relative p-3 rounded-xl max-w-xs bg-slate-900 flex flex-col min-w-24">
               <div
                 className="pb-2"

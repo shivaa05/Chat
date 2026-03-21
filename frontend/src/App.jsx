@@ -15,6 +15,10 @@ const App = () => {
     getAllChatPartners()
   }, [])
 
+  useEffect(() => {
+    getAllChatPartners()
+  },[authUser])
+
   return (
     <div className='h-screen w-full bg-slate-900 text-white'>
       <Routes>

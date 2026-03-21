@@ -6,7 +6,7 @@ const Profile = () => {
   const { authUser, updateProfile } = useAuthStore();
   const [fullname, setFullname] = useState(authUser?.fullname);
   const [bio, setBio] = useState(authUser?.bio);
-  const [frontendImg, setFrontendImg] = useState(null);
+  const [frontendImg, setFrontendImg] = useState(authUser?.profileImage);
   const [backendImg, setBackendImg] = useState(null);
 
   const updateProfileHandler = () => {
@@ -31,7 +31,7 @@ const Profile = () => {
     <div className="w-full border h-full mt-5 flex flex-col items-center py-10 px-5 rounded-md border-blue-950 bg-slate-900/30">
       <div className="size-24 border rounded-full flex text-4xl justify-center items-center bg-green-800/70 relative ">
         {frontendImg ? (
-          <img src={frontendImg} className="h-full w-full rounded-full" />
+          <img src={frontendImg} className="h-full w-full rounded-full object-cover" />
         ) : (
           <div>{authUser?.username[0].toUpperCase()}</div>
         )}

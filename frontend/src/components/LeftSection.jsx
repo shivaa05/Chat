@@ -106,7 +106,14 @@ const LeftSection = () => {
                 >
                   <div className="relative">
                     <div className="size-12 rounded-full border flex justify-center items-center text-2xl bg-green-800/50">
-                      {user.username.slice(0, 1).toUpperCase()}
+                      {user.profileImage ? (
+                        <img
+                          src={user.profileImage}
+                          className="h-full w-full rounded-full object-cover"
+                        />
+                      ) : (
+                        user.username.slice(0, 1).toUpperCase()
+                      )}
                     </div>
                     {onlineUsers.includes(user._id) && (
                       <div className="absolute size-3 bg-green-500 top-0.5 -right-0.5 rounded-full"></div>
@@ -134,7 +141,14 @@ const LeftSection = () => {
                   onClick={() => selectUserHandler(user._id)}
                 >
                   <div className="size-12 rounded-full border flex justify-center items-center text-2xl bg-green-800/50">
-                    {user.username.slice(0, 1).toUpperCase()}
+                    {user.profileImage ? (
+                      <img
+                        src={user.profileImage}
+                        className="h-full w-full rounded-full object-cover"
+                      />
+                    ) : (
+                      user.username.slice(0, 1).toUpperCase()
+                    )}
                   </div>
                   <div>
                     <div>{user.username}</div>
