@@ -1,22 +1,53 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { Camera } from "lucide-react";
 
 const Profile = () => {
   const { authUser, updateProfile } = useAuthStore();
   const [fullname, setFullname] = useState(authUser?.fullname);
   const [bio, setBio] = useState(authUser?.bio);
+  const [frontendImg, setFrontendImg] = useState(null);
+  const [backendImg, setBackendImg] = useState(null);
 
   const updateProfileHandler = () => {
     const bioTrimmed = bio.trim();
     const fullnameTrimmed = fullname.trim();
 
-    updateProfile(bioTrimmed, fullnameTrimmed);
+    updateProfile(bioTrimmed, fullnameTrimmed,backendImg);
+  };
+
+  const imageRef = useRef();
+  const profileHandler = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // 🔥 Instant preview
+    const preview = URL.createObjectURL(file);
+    setFrontendImg(preview);
+    setBackendImg(file)
   };
 
   return (
     <div className="w-full border h-full mt-5 flex flex-col items-center py-10 px-5 rounded-md border-blue-950 bg-slate-900/30">
-      <div className="size-24 border rounded-full flex text-4xl justify-center items-center bg-green-800/70">
-        {authUser?.username[0].toUpperCase()}
+      <div className="size-24 border rounded-full flex text-4xl justify-center items-center bg-green-800/70 relative ">
+        {frontendImg ? (
+          <img src={frontendImg} className="h-full w-full rounded-full" />
+        ) : (
+          <div>{authUser?.username[0].toUpperCase()}</div>
+        )}
+        <div className="size-6 border bg-gray-200 absolute bottom-3 -right-1 cursor-pointer flex justify-center items-center rounded-full">
+          <Camera
+            className=" size-4 text-green-600"
+            onClick={() => imageRef.current.click()}
+          />
+          <input
+            type="file"
+            accept="image/*"
+            ref={imageRef}
+            onChange={profileHandler}
+            hidden
+          />
+        </div>
       </div>
 
       <div className="flex flex-col mt-5 items-center">

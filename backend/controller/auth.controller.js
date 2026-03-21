@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import generateToken from "../lib/generateToken.js";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import { uploadOnCloudinary } from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
   try {
@@ -147,6 +148,8 @@ export const updateProfile = async (req, res) => {
   try {
     const { fullname, bio } = req.body;
     const userId = req.userId;
+    const profileImage = req.file;
+    console.log("profileImage",req.file)
 
     const user = await User.findById(userId);
     if (!user) {
@@ -158,6 +161,10 @@ export const updateProfile = async (req, res) => {
 
     if (fullname) user.fullname = fullname;
     if (bio) user.bio = bio;
+    if (profileImage) {
+      const profileUrl = await uploadOnCloudinary(profileImage.path);
+      user.profileImage = profileUrl;
+    }
     await user.save();
     return res.status(200).json({
       success: true,
@@ -165,7 +172,7 @@ export const updateProfile = async (req, res) => {
       user,
     });
   } catch (error) {
-    console.log("Error in updating profile");
+    console.log("Error in updating profile",error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",

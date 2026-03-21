@@ -121,16 +121,19 @@ export const useAuthStore = create((set, get) => ({
     if (get().socket?.connected) get().socket.disconnect();
   },
 
-  updateProfile: async (bio, fullname) => {
+  updateProfile: async (bio, fullname, image) => {
     try {
-      const res = await axios.post(
-        `${baseUrl}/auth/update-profile`,
-        {
-          bio,
-          fullname,
+      const formdata = new FormData();
+      formdata.append("bio", bio);
+      formdata.append("fullname", fullname);
+      console.log(image)
+      formdata.append("profileImage", image);
+      const res = await axios.post(`${baseUrl}/auth/update-profile`, formdata, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data", // 🔥 add this
         },
-        { withCredentials: true },
-      );
+      });
       console.log("Updated:", res);
       set({ authUser: res.data.user });
       toast.success(res.data.message);
